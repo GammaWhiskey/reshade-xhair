@@ -69,6 +69,12 @@ uniform bool InvertHideOnRMB <
   ui_tooltip = "Inverts the behavior of 'Invert on RMB'";
 > = 0;
 
+uniform bool FollowCursor <
+  ui_category = CATEGORY_GENERAL;
+  ui_label = "Follow Cursor";
+  ui_tooltip = "Makes the crosshair follow the cursor. With <3 from Gamma/SimplestUsername";
+> = 0;
+
 /**
  * Composite Xhair Settings
  */
@@ -312,6 +318,12 @@ uniform bool rightMouseToggle <
 >;
 
 /**
+ * Gamer States
+ */
+
+uniform float2 MousePoint < source = "mousepoint"; >;
+
+/**
  * Helpers
  */
 
@@ -510,7 +522,13 @@ float4 PS_Xhair(float4 pos : SV_Position, float2 texcoord : TEXCOORD) : SV_Targe
     return drawBackground;
   }
 
-  float2 center = float2((BUFFER_WIDTH / 2) + OffsetX, (BUFFER_HEIGHT / 2) + OffsetY);
+  float2 center;
+
+  if (FollowCursor) {
+    center = MousePoint;
+  } else {
+    center = float2((BUFFER_WIDTH / 2) + OffsetX, (BUFFER_HEIGHT / 2) + OffsetY);
+  }
 
   int distX = center.x - pos.x;
   int distY = center.y - pos.y;
